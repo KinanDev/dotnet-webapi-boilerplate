@@ -9,7 +9,7 @@ public class MultitenancyConstants
         public const string EmailAddress = "admin@root.com";
     }
 
-    public const string DefaultPassword = "123Pa$$word!";
+    public const string DefaultPassword = "asdASD@1234";
 
     public const string TenantIdName = "tenant";
 }

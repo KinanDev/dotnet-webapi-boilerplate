@@ -8,16 +8,6 @@ public class Activity : AuditableEntity, IAggregateRoot
     public string City { get; set; }
     public string? Venue { get; set; }
 
-    public Activity(string title, string description, string category, string city, string venue)
-    {
-        Title = title;
-        Description = description;
-        Date = DateTime.Now;
-        Category = category;
-        City = city;
-        Venue = venue;
-    }
-
     public Activity Update(string title, string description, string category, string city, string venue)
     {
         if (title is not null && Title?.Equals(title) is not true) Title = title;
@@ -25,7 +15,8 @@ public class Activity : AuditableEntity, IAggregateRoot
         if (category is not null && Category?.Equals(category) is not true) Category = category;
         if (city is not null && City?.Equals(city) is not true) City = city;
         if (venue is not null && Venue?.Equals(venue) is not true) Venue = venue;
-        Date = DateTime.Now;
+
+        // Date = DateTime.Now;
         return this;
     }
 }

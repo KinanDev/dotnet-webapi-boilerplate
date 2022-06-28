@@ -1,4 +1,6 @@
-﻿namespace FSH.WebApi.Application.Catalog.Activities;
+﻿using AutoMapper;
+
+namespace FSH.WebApi.Application.Catalog.Activities;
 
 public class CreateActivityRequest : IRequest<Guid>
 {
@@ -6,7 +8,7 @@ public class CreateActivityRequest : IRequest<Guid>
     public string? Description { get; set; }
     public string? Category { get; set; }
     public string? City { get; set; }
-    public string? Veneu { get; set; }
+    public string? Venue { get; set; }
 }
 
 public class CreateActivityRequestValidator : CustomValidator<CreateActivityRequest>
@@ -29,11 +31,19 @@ public class CreateActivityRequestHandler : IRequestHandler<CreateActivityReques
     // Add Domain Events automatically by using IRepositoryWithEvents
     private readonly IRepositoryWithEvents<Activity> _repository;
 
-    public CreateActivityRequestHandler(IRepositoryWithEvents<Activity> repository) => _repository = repository;
+    private readonly IMapper _mapper;
+
+    public CreateActivityRequestHandler(IRepositoryWithEvents<Activity> repository, IMapper mapper)
+    {
+        _repository = repository;
+        _mapper = mapper;
+    }
 
     public async Task<Guid> Handle(CreateActivityRequest request, CancellationToken cancellationToken)
     {
-        var activity = new Activity(request.Title, request.Description, request.Category, request.City, request.Veneu);
+        var activity = _mapper.Map<Activity>(request);
+
+        activity.Date = DateTime.UtcNow;
 
         await _repository.AddAsync(activity, cancellationToken);
 

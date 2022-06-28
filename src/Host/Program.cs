@@ -1,9 +1,14 @@
+using AutoMapper;
+
 using FluentValidation.AspNetCore;
+
 using FSH.WebApi.Application;
+using FSH.WebApi.Application.Mapper;
 using FSH.WebApi.Host.Configurations;
 using FSH.WebApi.Host.Controllers;
 using FSH.WebApi.Infrastructure;
 using FSH.WebApi.Infrastructure.Common;
+
 using Serilog;
 
 [assembly: ApiConventionType(typeof(FSHApiConventions))]
@@ -20,6 +25,14 @@ try
         config.WriteTo.Console()
         .ReadFrom.Configuration(builder.Configuration);
     });
+
+    // AutoMapper
+    var config = new MapperConfiguration(cfg =>
+    {
+        cfg.AddProfile(new AutoMapperProfile());
+    });
+    var mapper = config.CreateMapper();
+    builder.Services.AddSingleton(mapper);
 
     builder.Services.AddControllers().AddFluentValidation();
     builder.Services.AddInfrastructure(builder.Configuration);
